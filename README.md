@@ -68,7 +68,7 @@ Options:
 ### Operating Systems supported
 > - Linux
 > - Windows
-###### Note:- This tool work in kali(2020.1) perfectly. But for other OS we need to install chromedriver to run selenium.
+###### Note:- This tool work in kali(2020.1) perfectly! no lengthy process for installation, just run ```sudo bash ./install.sh ```.
 
 ### Screenshots:-
 
