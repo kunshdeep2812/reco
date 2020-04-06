@@ -1,0 +1,52 @@
+
+Commands
+
+1.) RangeScan -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+	ruby reco.rb --script rangescan -s <starting_ip> -e <ending_ip> --thread <number> -o <output file/foldername>
+	 |
+	 ---> ruby reco.rb --script rangescan -s 192.168.0.1 -e 192.168.0.254 --thread 50 -o example.txt
+
+	ruby reco.rb --script rangescan -r <CIDR_range> --thread <number> -o <output file/foldername>
+     |
+	 ---> ruby reco.rb --script rangescan -r 192.168.0.1/24 --thread 50 -o example.txt
+	 
+	ruby reco.rb --script rangescan --iL <file_contain_ipaddress/domain_name_list> --thread <number> -o <output file/foldername>
+	 |
+	 ---> ruby reco.rb --script rangescan --iL /home/example/ip-list.txt --thread 100 -o <output file/foldername>
+
+
+2.) Portscan -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	ruby reco.rb --script portscan  -s <starting_ip> -e <ending_ip> --scantype <full,top,custom> --thread <number> -o <output file/foldername>
+	ruby reco.rb --script portscan  -r <cidr_range> --scantype <full,top,custom> --thread <number> -o <output file/foldername>
+	ruby reco.rb --script portscan  --iL <file_contain_ipaddress/domain_name> --scantype <full,top,custom> --thread <number> -o <output file/foldername> 
+
+	ruby reco.rb --script portscan  -s 192.168.0.1 -e 192.168.0.3 --scantype custom -p 443,80,8443,3443 --thread 20 -o example.txt
+ 	ruby reco.rb --script portscan  -s 192.168.0.1 -e 192.168.0.3 --scantype custom  -p 443,80,8443,3443 --randomagent true --thread 20 -o example.txt
+	 
+	 --------single ip------------------------
+			ruby reco.rb --script portscan  --ip <single/multiple ipaddress to scan> --scantype top --thread 20 -o <output_file_name.csv/txt>
+			ruby reco.rb --script portscan  --ip <single/multiple ipaddress to scan> --scantype custom -p 443,80,8443,3443 --randomagent true --thread 20 -o <output_file_name.csv/txt>
+			ruby reco.rb --script portscan  --ip <single/multiple ipaddress to scan> --randomagent true --thread 20 -o <output_file_name.csv/txt>
+			ruby reco.rb --script portscan  --ip <single/multiple ipaddress to scan> --thread 20 -o <output_file_name.csv/txt>
+			ruby reco.rb --script portscan  --ip <single/multiple ipaddress to scan> -o <output_file_name.csv/txt>
+			ruby reco.rb --script portscan  --ip <single/multiple ipaddress to scan> --thread 12
+
+
+3.) web Socket(echo-test)---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	ruby reco.rb --script echotest --socketurl wss://example.com
+
+
+4.) Vhostfind --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	ruby reco.rb --script vhostfind -d <domain> --thread <count> -o <output file/foldername>
+	ruby reco.rb --script vhostfind -d <domain> -w <wordlist> --thread <count> -o <output file/foldername>
+	ruby reco.rb --script vhostfind -d <domain> -w <wordlist> --randomagent true --thread <count> -o <output file/foldername>
+
+5.) Deep redirection and screenshot ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	ruby reco.rb --script redirect-scr -s <starting_ip> -e <ending_ip> --thread <number> -O <filename_for_output/foldername>
+	ruby reco.rb --script redirect-scr -r <CIDR_range> --thread <number> -O <output_filename/foldername>
+	ruby reco.rb --script redirect-scr --iL <file_contain_ipaddress/domains> --thread <number> -O <output_filename/foldername>

@@ -1,0 +1,20 @@
+
+apt-get -y update
+apt-get install -y ruby-full
+apt-get install -y libssl-dev
+
+--------------------------------------------------ruby gem requirements-----------------------------------------------
+
+gem install ipaddr
+gem install ipaddress
+gem install httparty
+gem install colorize
+gem install csv
+gem install timeout
+gem install ruby-progressbar
+gem install faye-websocket
+gem install eventmachine
+gem install json
+gem install terminal-table
+gem install selenium-webdriver
+gem install fileutils
