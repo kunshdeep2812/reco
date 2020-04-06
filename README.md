@@ -16,7 +16,7 @@ cd reco
 sudo bash ./install.sh
 ruby reco.rb --help/-h
 ```
-##### Note:- If you are using the "rbenv" then run the install.sh file without sudo or perform the installation task manually of each command in install.sh
+##### Note:- If you are using the "rbenv" then run the ```install.sh``` file without ```sudo``` or perform the installation task manually of each command in ```install.sh```.
 
 ### Options
 ```ruby
