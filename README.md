@@ -2,3 +2,5 @@
 A recon tool for pentester's with a simple command line.
 ### Features
 --------------------------------------------------------------------
+> - Range scan of ip's
+> - Port scan on IP-range/Domain's
