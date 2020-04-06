@@ -15,6 +15,53 @@ git clone https://github.com/kunshdeep2812/reco
 cd reco
 sudo bash ./install.sh
 ```
+### Options
+```ruby
+Usage: ruby reco.rb --script [OPTIONS] ..[OPTIONS]
+
+How to use: reco.rb --script rangescan -s 192.0.0.1 -e 192.0.0.255 --thread 10
+How to use: reco.rb --script portscan --ip 192.168.0.6 --scantype custom -p 80,443,23 --thread 40
+How to use: reco.rb --script rangescan -r 192.168.0.1/24 -o test.csv --thread 10
+How to use: reco.rb --script portscan --iL /home/test/example.txt --randomagent true --thread 50 -o example.txt
+How to use: reco.rb --script echotest --socketurl wss://example.com
+How to use: reco.rb --help
+
+For more please check the commands.txt file
+
+Options: 
+    -s, --startIPAddress             Provide Starting IPaddress
+                                                                                                                                                                      
+    -e, --endIPAddress               Provide ending IPaddress
+                                                                                                                                                                      
+    -o, --output                     Provide filename with extension(.txt)
+                                                                                                                                                                      
+    -w, --wordlist                   Provide filename which contains wordlist
+                                                                                                                                                                      
+    -d, --domain                     Provide domain name for bruteforce subdomain
+                                                                                                                                                                      
+    -r, --ipRange                    Provide IpAddress Range (e.g.: 192.0.168.1/24)
+                                                                                                                                                                      
+        --randomagent                For random user-agent, set --randomagent true
+                                                                                                                                                                      
+        --socketurl                  Provide socket initiation url
+                                                                                                                                                                      
+        --iL                         provide the list of ipaddress/domain-name file
+                                                                                                                                                                      
+        --ip                         provide single Ip
+                                                                                                                                                                      
+        --thread                     provide number of threads
+                                                                                                                                                                      
+        --script                     provide specific script name
+                                                                                                                                                                      
+        --scantype                   provide port scan type (full, top, custom)
+                                                                                                                                                                      
+    -p, --port                       Provide single or multiple port to scan
+                                                                                                                                                                      
+    -h, --help                       Help Menu
+                                                                                                                                                                      
+        --scriptlist                 List of scripts or modules
+
+```
 ### Operating Systems supported
 > - Linux
 > - Windows
