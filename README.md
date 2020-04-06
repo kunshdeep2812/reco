@@ -1,4 +1,4 @@
-# Reco... (version 0.0.1)  <a href="https://kunshdeep.com"><img src="https://user-images.githubusercontent.com/40362096/78559302-ca3dcd80-7831-11ea-91e4-7161c644d0ef.png" width=100px alt="Reco...|kunshdeep"></a> ![](https://github.com/kunshdeep2812/reco/stargazers) ![](https://img.shields.io/github/forks/pandao/editor.md.svg) ![](https://img.shields.io/github/tag/pandao/editor.md.svg) ![](https://img.shields.io/github/release/pandao/editor.md.svg) ![](https://img.shields.io/github/issues/pandao/editor.md.svg) ![](https://img.shields.io/bower/v/editor.md.svg)
+# Reco... (version 0.0.1)  <a href="https://kunshdeep.com"><img src="https://user-images.githubusercontent.com/40362096/78559302-ca3dcd80-7831-11ea-91e4-7161c644d0ef.png" width=100px alt="Reco...|kunshdeep"></a>
 A recon tool for pentester's with a simple command line.
 ### Features:-
   > - Range scan of ip's
