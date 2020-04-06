@@ -67,9 +67,11 @@ Options:
 
 ```
 ### Operating Systems supported
-> - Linux
+> - Linux (recommended)
 > - Windows
-###### Note:- This tool work in kali(2020.1) perfectly! no lengthy process for installation, just run ```sudo bash ./install.sh ```.
+###### Note:- 
+This tool work in kali(2020.1) perfectly! no lengthy process for installation, just run ```sudo bash ./install.sh ```.
+If you are useing non GUI version of linux install web ```chromedriver``` manually to run ```selenium```.
 
 ### Screenshots:-
 
