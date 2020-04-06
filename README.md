@@ -8,7 +8,7 @@ A recon tool for pentester's with a simple command line.
   > - Deep redirection url check
   > - Working domain Screenshot's
 ### Upcoming features:-
-> - subdomain finder, Deep recon interface, some common exploits.
+> - Subdomain finder, deep recon interface, some common exploits.
 ### Installation & Usage
 ```sh
 git clone https://github.com/kunshdeep2812/reco
@@ -49,16 +49,11 @@ Options:
                                                                                                                                                                       
         --ip                         provide single Ip
                                                                                                                                                                       
-        --thread                     provide number of threads
-                                                                                                                                                                      
-        --script                     provide specific script name
-                                                                                                                                                                      
-        --scantype                   provide port scan type (full, top, custom)
-                                                                                                                                                                      
-    -p, --port                       Provide single or multiple port to scan
-                                                                                                                                                                      
-    -h, --help                       Help Menu
-                                                                                                                                                                      
+        --thread                     provide number of threads                         
+        --script                     provide specific script name                  
+        --scantype                   provide port scan type (full, top, custom)               
+    -p, --port                       Provide single or multiple port to scan             
+    -h, --help                       Help Menu                    
         --scriptlist                 List of scripts or modules
 
 ```
