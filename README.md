@@ -7,3 +7,10 @@ A recon tool for pentester's with a simple command line.
   > - Echo test of websocket to check cross site websocket hijacking
   > - Deep redirection url check
   > - Working domain Screenshot's
+
+### Installation & Usage
+```sh
+git clone https://github.com/kunshdeep2812/reco
+cd reco
+sudo bash ./install.sh
+```
