@@ -186,7 +186,7 @@ class Cidrportscanner
           sz = $scanports.size
           $progressbar.total = r1*sz
         when 'top'
-          $scanports = [22,21,80,443,8080,8000]
+          $scanports = [80,443,3000,8080,4848,7001,8000,8005,8008,8181,8443,9000,9043,9060,9990]
           sz = $scanports.length
           $progressbar.total = r1*sz
         when 'custom'
