@@ -14,7 +14,10 @@ A recon tool for pentester's with a simple command line.
 git clone https://github.com/kunshdeep2812/reco
 cd reco
 sudo bash ./install.sh
+ruby reco.rb --help/-h
 ```
+##### Note:- If you are using the "rbenv" then run the install.sh file without sudo or perform the installation task manually of each command in install.sh
+
 ### Options
 ```ruby
 Usage: ruby reco.rb --script [OPTIONS] ..[OPTIONS]
