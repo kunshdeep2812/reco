@@ -5,7 +5,7 @@ A recon tool for pentester's with a simple command line.
   > - Port scan on IP-range/Domain's
   > - Vhost finder
   > - Echo test of websocket to check cross site websocket hijacking
-  > - Deep redirection url check
+  > - Redirection url check
   > - Working domain Screenshot's
 ### Upcoming features:-
 > - Subdomain finder, deep recon interface, some common exploits.
@@ -66,5 +66,16 @@ Options:
 > - Linux
 > - Windows
 ###### Note:- This tool work in kali(2020.1) perfectly. But for other OS we need to install chromedriver to run selenium.
+
+### Screenshots:-
+
+- Portscan
+![portscan2](https://user-images.githubusercontent.com/40362096/78561734-de83c980-7835-11ea-91bc-10ea6554d671.png)
+
+- Redirection checker and screenshots
+![deep-redirec-screenshot](https://user-images.githubusercontent.com/40362096/78561985-3fab9d00-7836-11ea-8046-55d6ccfe415e.png)
+
+- Vhost finder
+![vhostfind](https://user-images.githubusercontent.com/40362096/78562330-cbbdc480-7836-11ea-8f5b-15863553eb90.png)
 
 
