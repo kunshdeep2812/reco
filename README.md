@@ -11,7 +11,7 @@ A recon tool for pentester's with a simple command line.
 > - Subdomain finder, deep recon interface, some common exploits.
 ### Installation & Usage
 ```sh
-git clone https://github.com/kunshdeep2812/reco
+git clone https://github.com/kunshdeep2812/reco.git
 cd reco
 sudo bash ./install.sh
 ruby reco.rb --help/-h
