@@ -14,3 +14,4 @@ git clone https://github.com/kunshdeep2812/reco
 cd reco
 sudo bash ./install.sh
 ```
+###### Note:- This tool work in kali(2020.1) perfect.
