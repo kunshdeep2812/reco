@@ -49,11 +49,16 @@ Options:
                                                                                                                                                                       
         --ip                         provide single Ip
                                                                                                                                                                       
-        --thread                     provide number of threads                         
-        --script                     provide specific script name                  
-        --scantype                   provide port scan type (full, top, custom)               
-    -p, --port                       Provide single or multiple port to scan             
-    -h, --help                       Help Menu                    
+        --thread                     provide number of threads
+                                                                                                                                                                      
+        --script                     provide specific script name
+                                                                                                                                                                      
+        --scantype                   provide port scan type (full, top, custom)
+                                                                                                                                                                      
+    -p, --port                       Provide single or multiple port to scan
+                                                                                                                                                                      
+    -h, --help                       Help Menu
+                                                                                                                                                                      
         --scriptlist                 List of scripts or modules
 
 ```
