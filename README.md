@@ -82,4 +82,5 @@ Options:
 - Vhost finder
 ![vhostfind](https://user-images.githubusercontent.com/40362096/78562330-cbbdc480-7836-11ea-8f5b-15863553eb90.png)
 
-
+# License
+See the LICENSE file.
