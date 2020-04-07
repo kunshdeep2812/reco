@@ -29,6 +29,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 apt-get -y update
+apt-get install -y ruby
 apt-get install -y ruby-full
 apt-get install -y libssl-dev
 echo -e "$OKO + -- --=[ Installing gem dependencies...$RESET"
