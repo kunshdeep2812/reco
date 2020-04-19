@@ -129,7 +129,6 @@ class Rangescanner
           path1 = "./Output/#{$file1}:#{timestmp}"
           folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
           csv1 = CSV.open("#{path1}/#{$file1}", "a")
-          csv1 = CSV.open($file1, "a")
           csv1 << ['Status code','IP address','IP address Detail']
 
         when $r2
