@@ -1,5 +1,16 @@
 language: ruby
 before_install:
 - sudo apt-get install -y ruby
+- gem install ipaddr
+- gem install ipaddress
+- gem install httparty
 - gem install colorize
+- gem install csv
+- gem install timeout
+- gem install ruby-progressbar
+- gem install faye-websocket
+- gem install eventmachine
+- gem install json
 - gem install terminal-table
+- gem install selenium-webdriver
+- gem install fileutils
