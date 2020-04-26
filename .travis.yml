@@ -1,25 +1,3 @@
-	before_install:
-  		- sudo apt-get -y update
-    	- sudo apt-get install -y ruby
-    	- sudo apt-get install -y ruby-full
-    	- sudo apt-get install -y libssl-dev
-	addons:
-  		apt:
-    		update: true
-   	language: ruby
-		rvm:
-			- 2.6.6
-		install:
-    - gem install ipaddr
-    - gem install ipaddress
-    - gem install httparty
-    - gem install colorize
-    - gem install csv
-    - gem install timeout
-    - gem install ruby-progressbar
-    - gem install faye-websocket
-    - gem install eventmachine
-    - gem install json
-    - gem install terminal-table
-    - gem install selenium-webdriver
-    - gem install fileutils
+language: ruby
+rvm:
+- 2.6.6
