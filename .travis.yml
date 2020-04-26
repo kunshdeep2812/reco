@@ -1,3 +1,4 @@
 language: ruby
 ruby: ruby
 install: gem install colorize
+install: terminal-table
