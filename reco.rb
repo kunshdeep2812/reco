@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# Version: 0.0.1
 require 'optparse'
 require 'colorize'
 require 'terminal-table'
