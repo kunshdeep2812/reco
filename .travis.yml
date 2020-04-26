@@ -1,8 +1,8 @@
-	language: ruby
-	ruby:
-	 - "2.6.6"
-	install:
-	- sudo apt-get -y update
+language: ruby
+   ruby:
+    - "2.6.6"
+   install:
+    - sudo apt-get -y update
     - sudo apt-get install -y ruby
     - sudo apt-get install -y ruby-full
     - sudo apt-get install -y libssl-dev
