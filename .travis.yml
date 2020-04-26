@@ -1,0 +1,23 @@
+language: ruby
+   ruby:
+    - "2.6.6"
+   install:
+    - sudo apt-get -y update
+    - sudo apt-get install -y ruby
+    - sudo apt-get install -y ruby-full
+    - sudo apt-get install -y libssl-dev
+    - gem install ipaddr
+    - gem install ipaddress
+    - gem install httparty
+    - gem install colorize
+    - gem install csv
+    - gem install timeout
+    - gem install ruby-progressbar
+    - gem install faye-websocket
+    - gem install eventmachine
+    - gem install json
+    - gem install terminal-table
+    - gem install selenium-webdriver
+    - gem install fileutils
+   script:
+   - ruby reco.rb -h
