@@ -1,3 +1,6 @@
 language: ruby
-rvm: 2.6.6
-install: gem install colorize, gem install terminal-table
+rvm: 
+-2.6.6
+install: 
+-gem install colorize
+-gem install terminal-table
