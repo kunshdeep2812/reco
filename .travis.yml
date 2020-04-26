@@ -1,4 +1,5 @@
 language: ruby
-before_install: 
--gem install colorize
--gem install terminal-table
+before_install:
+- sudo apt-get install -y ruby
+- gem install colorize
+- gem install terminal-table
