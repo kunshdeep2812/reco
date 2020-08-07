@@ -3,11 +3,12 @@
 ### 
 A recon tool for pentester's with a simple command line.  [![GitHub followers](https://img.shields.io/github/followers/kunshdeep2812.svg?style=social&label=Follow&maxAge=2592000)](https://github.com/kunshdeep2812?tab=followers)   [![GitHub stars](https://img.shields.io/github/stars/kunshdeep2812/reco.svg?style=social&label=Star&maxAge=2592000)](https://github.com/kunshdeep2812/reco/stargazers)   [![GitHub watchers](https://img.shields.io/github/watchers/kunshdeep2812/reco.svg?style=social&label=Watch&maxAge=2592000)](https://github.com/kunshdeep2812/reco/watchers)    [![Tweeting](https://img.shields.io/twitter/url/http/shields.io.svg?)](https://twitter.com/KandpalDeepk)
 ### Features:-
-  > - Range scan of ip's
-  > - Port scan on IP-range/Domain's
-  > - Vhost finder
+  > - Range scan of ip's (CIDR range, custom provided range)
+  > - Validate working subdomain/Ip's for provided raw list
+  > - Web portal port scan on IP-range/Domain's(port based vhost)
+  > - Vhost finder(on domain name and IP based)
   > - Echo test of websocket to check cross site websocket hijacking
-  > - Redirection url check
+  > - Deep Redirection url check
   > - Working domain Screenshot's
 ### Upcoming features:-
 > - Subdomain finder, deep recon interface, some common exploits.
