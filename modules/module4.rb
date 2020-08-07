@@ -218,7 +218,7 @@ end
                 domain.to_s
               end
               #sdsadasdas
-              response = HTTParty.get("https://#{domain}", :headers => headers, timeout: 10)
+              response = HTTParty.get("https://#{domain}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 10)
               if response.code != nil
                 options = Selenium::WebDriver::Chrome::Options.new(args: ['--headless','--user-agent=Chrome/77','--disable-infobars','--disable-dev-shm-usage','--no-sandbox','--disable-extensions'])
                 capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(accept_insecure_certs: true)
@@ -256,4 +256,3 @@ end
   end
 
 end
-
