@@ -255,9 +255,9 @@ class Cidrportscanner
                     domain.to_s
                   end
                   if port === 80 || port === 443
-                    response = HTTParty.get("http://#{domain}", :headers => headers, timeout: 5)
+                    response = HTTParty.get("http://#{domain}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 5)
                   else
-                    response = HTTParty.get("http://#{domain}:#{port}", :headers => headers, timeout: 5)
+                    response = HTTParty.get("http://#{domain}:#{port}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 5)
                   end
                   #$progressbar.log headers
                   $progressbar.log"\tWeb Portal: ".yellow+"#{domain}:".white+""+"#{port}".green
@@ -277,9 +277,9 @@ class Cidrportscanner
                     domain.to_s
                   end
                   if port === 80 || port === 443
-                    response = HTTParty.get("https://#{domain}", :headers => headers, timeout: 5)
+                    response = HTTParty.get("https://#{domain}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 5)
                   else
-                    response = HTTParty.get("https://#{domain}:#{port}", :headers => headers, timeout: 5)
+                    response = HTTParty.get("https://#{domain}:#{port}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 5)
                   end
                   $progressbar.log"\tWeb Portal: ".yellow+"#{domain}:".white+""+"#{port}".green
                     case $file1
