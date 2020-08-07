@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-# Version: 0.0.1
+# Version: 0.0.3
 require 'optparse'
 require 'colorize'
 require 'terminal-table'
@@ -803,6 +803,7 @@ when 'redirect-scr'
             aa.vscan
           end
         end
+#--------------------------------
       else
         if $x11 !=nil || $x5 !=nil
           if $x7 !=nil
@@ -837,6 +838,75 @@ when 'redirect-scr'
           end
         end
       end
+    elsif $x9 !=nil
+      #-------------------------------------
+            if $x3 !=nil
+              if $x11 !=nil || $x5 !=nil
+                if $x7 !=nil
+                  aa = Vhfind1.new
+                  aa.main_domain_file_list($x9)
+                  aa.thread_count($x11.to_i)
+                  aa.fname($x3)
+                  aa.txtfile($x5)
+                  aa.change_uagent($x7)
+                  aa.vscan
+                else
+                  aa = Vhfind1.new
+                  aa.main_domain_file_list($x9)
+                  aa.thread_count($x11.to_i)
+                  aa.fname($x3)
+                  aa.txtfile($x5)
+                  #aa.change_uagent("true")
+                  aa.vscan
+                end
+              else
+                if $x7 !=nil
+                  aa = Vhfind1.new
+                  aa.main_domain_file_list($x9)
+                  aa.fname($x3)
+                  aa.change_uagent($x7)
+                  aa.vscan
+                else
+                  aa = Vhfind1.new
+                  aa.fname($x3)
+                  aa.main_domain_file_list($x9)
+                  aa.vscan
+                end
+              end
+            else
+              if $x11 !=nil || $x5 !=nil
+                if $x7 !=nil
+                  aa = Vhfind1.new
+                  aa.main_domain_file_list($x9)
+                  aa.thread_count($x11.to_i)
+                  #aa.fname($x3)
+                  aa.txtfile($x5)
+                  aa.change_uagent($x7)
+                  aa.vscan
+                else
+                  aa = Vhfind1.new
+                  aa.main_domain_file_list($x9)
+                  aa.thread_count($x11.to_i)
+                  #aa.fname($x3)
+                  aa.txtfile($x5)
+                  #aa.change_uagent("true")
+                  aa.vscan
+                end
+              else
+                if $x7 !=nil
+                  aa = Vhfind1.new
+                  aa.main_domain_file_list($x9)
+                  #aa.fname($x3)
+                  aa.change_uagent($x7)
+                  aa.vscan
+                else
+                  aa = Vhfind1.new
+                  #aa.fname($x3)
+                  aa.main_domain_file_list($x9)
+                  aa.vscan
+                end
+              end
+            end
     else
       puts "\tProvide valid args fors vhostfind\n"
     end
@@ -854,5 +924,3 @@ when 'redirect-scr'
     puts
   end
 end
-
-
