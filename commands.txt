@@ -14,6 +14,7 @@ Commands
 	ruby reco.rb --script rangescan --iL <file_contain_ipaddress/domain_name_list> --thread <number> -o <output file/foldername>
 	 |
 	 ---> ruby reco.rb --script rangescan --iL /home/example/ip-list.txt --thread 100 -o <output file/foldername>
+	 ---> ruby reco.rb --script rangescan --iL raw-subdomain.txt --thread 100 -o <output file/foldername> (to check working sub domain)
 
 
 2.) Portscan -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -44,9 +45,13 @@ Commands
 	ruby reco.rb --script vhostfind -d <domain> --thread <count> -o <output file/foldername>
 	ruby reco.rb --script vhostfind -d <domain> -w <wordlist> --thread <count> -o <output file/foldername>
 	ruby reco.rb --script vhostfind -d <domain> -w <wordlist> --randomagent true --thread <count> -o <output file/foldername>
+	ruby reco.rb --script vhostfind --iL list-of-sub-domain.txt -w keywords.txt --randomagent true --thread 30 -o <output file/foldername>
+	ruby reco.rb --script vhostfind --iL list-of-ip-address.txt -w sub-domain-list.txt --randomagent true --thread 30 -o <output file/foldername>
+
 
 5.) Deep redirection and screenshot ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	ruby reco.rb --script redirect-scr -s <starting_ip> -e <ending_ip> --thread <number> -O <filename_for_output/foldername>
 	ruby reco.rb --script redirect-scr -r <CIDR_range> --thread <number> -O <output_filename/foldername>
 	ruby reco.rb --script redirect-scr --iL <file_contain_ipaddress/domains> --thread <number> -O <output_filename/foldername>
+	ruby reco.rb --script redirect-scr --iL sub-domian.txt --thread 10 -O <output_filename/foldername> --( take screenshot for working subdomains)
