@@ -2,6 +2,7 @@
 require 'ipaddr'
 require 'ipaddress'
 require 'resolv'
+require 'openssl'
 require 'httparty'
 require 'colorize'
 require 'csv'
@@ -22,7 +23,7 @@ class ThreadPoolm01
               job, args = @jobs.pop
               job.call(*args)
               $progressbar.increment
-              sleep 0.1
+              sleep 0.3
             end
           end
         end
@@ -51,9 +52,8 @@ class ThreadPoolm01
   end
 
 class Rangescanner
-
+    ciphers = 'HIGH:!DH:!aNULL'
     OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-
     def initialize
       
     end
@@ -74,9 +74,12 @@ class Rangescanner
       @fname = fname
     end
     def cert(remote_host)
+      ciphers = 'HIGH:!DH:!aNULL'
       ctx = OpenSSL::SSL::SSLContext.new
+      ctx.set_params(verify_mode: OpenSSL::SSL::VERIFY_NONE)
+      ctx.ciphers = ciphers
       begin 
-          timeout(10) do
+        Timeout.timeout(10) do
               sock = TCPSocket.new(remote_host, 443)
               ssl = OpenSSL::SSL::SSLSocket.new(sock, ctx)
               ssl.connect
@@ -154,12 +157,14 @@ class Rangescanner
         end
         $progressbar.total = r1
         headers = { 
-          "User-Agent"  => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0",
-          "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language" => "en-US,en;q=0.5",
+          "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36",
+          "Accept" => "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
+          "Sec-Fetch-Site" => "none",
+          "Sec-Fetch-Mode" => "navigate",
+          "Sec-Fetch-User" => "?1",
+          "Sec-Fetch-Dest" => "document",
           "Accept-Encoding" => "gzip, deflate",
-          "DNT" => "1",
-          "Connection" => "close",
+          "Accept-Language" => "en-US,en;q=0.9",
           "Upgrade-Insecure-Requests" => "1"
         }
 
@@ -186,13 +191,13 @@ class Rangescanner
                 end
                 $a = $a + 1
             rescue => e
-              #puts e
+              #$progressbar.log "#{domain}:\t\t #{e}"
               begin
                 if $ffname !=nil
                   domain.delete!(",\r\n")
                   domain.to_s
                 end
-                response = HTTParty.get("https://#{domain}", :headers => headers, timeout: 10)
+                response = HTTParty.get("https://#{domain}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 10)
                 $progressbar.log"\tStatus Code: #{response.code}".yellow+"\t"+"#{domain}".white+"\t\t"+"#{cert(domain)||"No certificate"}".green
                 if $file1 !=nil
                    case $file1
@@ -204,7 +209,58 @@ class Rangescanner
                    end
                 end
                 $a = $a + 1
-              rescue 
+              rescue Errno::ECONNREFUSED
+                ciphers = 'HIGH:!DH:!aNULL'
+                ctx = OpenSSL::SSL::SSLContext.new
+                ctx.set_params(verify_mode: OpenSSL::SSL::VERIFY_NONE)
+                ctx.ciphers = ciphers
+                begin
+                  Timeout.timeout(10) do
+                    sock = TCPSocket.new(domain, 443)
+                    ssl = OpenSSL::SSL::SSLSocket.new(sock, ctx)
+                    ssl.connect
+                    cert = ssl.peer_cert
+                    $progressbar.log "Error:-#{e}:\t#{domain}:\t #{cert.subject.to_s}"
+                end
+                rescue 
+                end
+              rescue => e
+                if e.message =~ /^execution expired/
+                elsif e.message =~ /^end of file reached/
+                  ciphers = 'HIGH:!DH:!aNULL'
+                  ctx = OpenSSL::SSL::SSLContext.new
+                  ctx.set_params(verify_mode: OpenSSL::SSL::VERIFY_NONE)
+                  ctx.ciphers = ciphers
+                  begin
+                    Timeout.timeout(10) do
+                      sock = TCPSocket.new(domain, 443)
+                      ssl = OpenSSL::SSL::SSLSocket.new(sock, ctx)
+                      ssl.connect
+                      cert = ssl.peer_cert
+                      $progressbar.log "Error:-#{e}:\t#{domain}:\t #{cert.subject.to_s}"
+                  end
+                  rescue
+                    
+                  end
+                elsif e.message =~ /^Net::ReadTimeout/
+                  ciphers = 'HIGH:!DH:!aNULL'
+                  ctx = OpenSSL::SSL::SSLContext.new
+                  ctx.set_params(verify_mode: OpenSSL::SSL::VERIFY_NONE)
+                  ctx.ciphers = ciphers
+                  begin
+                    Timeout.timeout(10) do
+                      sock = TCPSocket.new(domain, 443)
+                      ssl = OpenSSL::SSL::SSLSocket.new(sock, ctx)
+                      ssl.connect
+                      cert = ssl.peer_cert
+                      $progressbar.log "Error:-#{e}:\t#{domain}:\t #{cert.subject.to_s}"
+                  end
+                  rescue
+
+                  end
+                else
+                  #$progressbar.log "#{domain}:\t\t #{e}"
+                end
               end
             end
           end
