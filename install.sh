@@ -32,6 +32,7 @@ apt-get -y update
 apt-get install -y ruby
 apt-get install -y ruby-full
 apt-get install -y libssl-dev
+apt-get install -y rbenv
 echo -e "$OKO + -- --=[ Installing gem dependencies...$RESET"
 gem install ipaddr
 gem install ipaddress
