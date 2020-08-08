@@ -51,7 +51,7 @@ Commands
 
 5.) Deep redirection and screenshot ----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	ruby reco.rb --script redirect-scr -s <starting_ip> -e <ending_ip> --thread <number> -O <filename_for_output/foldername>
-	ruby reco.rb --script redirect-scr -r <CIDR_range> --thread <number> -O <output_filename/foldername>
-	ruby reco.rb --script redirect-scr --iL <file_contain_ipaddress/domains> --thread <number> -O <output_filename/foldername>
-	ruby reco.rb --script redirect-scr --iL sub-domian.txt --thread 10 -O <output_filename/foldername> --( take screenshot for working subdomains)
+	ruby reco.rb --script redirect-scr -s <starting_ip> -e <ending_ip> --thread <number> -o <filename_for_output/foldername>
+	ruby reco.rb --script redirect-scr -r <CIDR_range> --thread <number> -o <output_filename/foldername>
+	ruby reco.rb --script redirect-scr --iL <file_contain_ipaddress/domains> --thread <number> -o <output_filename/foldername>
+	ruby reco.rb --script redirect-scr --iL sub-domian.txt --thread 10 -o <output_filename/foldername> --( take screenshot for working subdomains)
