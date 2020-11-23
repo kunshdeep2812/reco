@@ -38,7 +38,7 @@ class Banner
       ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝╚═╝             -+++++++:               -+******:
                         ! Recon tool All in one.....           -++++++***:-      :+********+
 #{colorize1("\t\t\t  @Made By Deepak kandpal....", "yellow")}            :++++*******************+-
-#{colorize1("\t\t\t      |-  @website/kunshdeep.com", "light purple")}           :++******************:
+#{colorize1("\t\t\t      |-  @website/kunshdeep.in", "light purple")}            :++******************:
 #{colorize1("\t\t\t      |-  @youtube/kunshdeep", "light purple")}                :++**************:
 #{colorize1("\t\t\t      |-  @twitter/kunsh deep", "light purple")}                :++++**********-
                                                                      +++++++++********:
