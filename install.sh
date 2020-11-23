@@ -14,7 +14,7 @@ echo -e "$OKW   ██╔══██╗██╔══╝  ██║     ██
 echo -e "$OKG   ██║  ██║███████╗╚██████╗╚██████╔╝██╗██╗██╗  $RESET"
 echo -e "$OKG   ╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═════╝ ╚═╝╚═╝╚═╝  $RESET"
 echo -e "$RESET"
-echo -e "$OKORANGE                      + -- --=[ https://kunshdeep.com $RESET"
+echo -e "$OKORANGE                      + -- --=[ https://kunshdeep.in $RESET"
 echo -e "$OKORANGE                      + -- --=[ Reco by @kunshdeep(Deepak Kandpal) $RESET"
 echo ""
 
