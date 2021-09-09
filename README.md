@@ -77,14 +77,7 @@ If you are useing ```Non-GUI``` version of linux install web ```chromedriver``` 
 
 ### Screenshots:-
 
-- Portscan
-![portscan2](https://user-images.githubusercontent.com/40362096/78561734-de83c980-7835-11ea-91bc-10ea6554d671.png)
-
-- Redirection checker and screenshots
-![deep-redirec-screenshot](https://user-images.githubusercontent.com/40362096/78561985-3fab9d00-7836-11ea-8046-55d6ccfe415e.png)
-
-- Vhost finder
-![vhostfind](https://user-images.githubusercontent.com/40362096/78562330-cbbdc480-7836-11ea-8f5b-15863553eb90.png)
+![vhostfind](![vhost1](https://user-images.githubusercontent.com/40362096/132621448-908dc886-ea1e-4057-bd2e-8d266c0f3d12.png))
 
 # License
 See the LICENSE file. [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/kunshdeep2812/reco/)
