@@ -77,7 +77,7 @@ If you are useing ```Non-GUI``` version of linux install web ```chromedriver``` 
 
 ### Screenshots:-
 
-![vhostfind](![vhost1](https://user-images.githubusercontent.com/40362096/132621448-908dc886-ea1e-4057-bd2e-8d266c0f3d12.png))
+![vhostfind](https://user-images.githubusercontent.com/40362096/132621448-908dc886-ea1e-4057-bd2e-8d266c0f3d12.png)
 
 # License
 See the LICENSE file. [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/kunshdeep2812/reco/)
