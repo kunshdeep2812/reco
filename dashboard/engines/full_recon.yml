@@ -1,0 +1,21 @@
+name: full-recon
+stages:
+  - name: subdomain_enum
+    tool: reco_subenum
+    subtype: full
+  - name: dns_recon
+    tool: reco_dnsrecon
+  - name: amass_passive
+    tool: amass
+  - name: nmap_scan
+    tool: nmap
+    args: "-sV -T4 -p- --min-rate 1000"
+  - name: masscan_scan
+    tool: masscan
+    args: "-p1-65535 --rate 1000"
+  - name: dir_bruteforce
+    tool: gobuster
+  - name: sqlmap_probe
+    tool: sqlmap
+  - name: osint_sweep
+    tool: spiderfoot

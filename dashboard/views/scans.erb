@@ -1,0 +1,41 @@
+<h1 class="mb-4">Scans</h1>
+
+<div class="card p-3 mb-4">
+  <h5>Launch scan</h5>
+  <form method="post" action="/scans" class="row g-2">
+    <div class="col-md-5">
+      <select class="form-select" name="target_id" required>
+        <option value="">Select target&hellip;</option>
+        <% @targets.each do |t| %>
+          <option value="<%= t.id %>" <%= 'selected' if params[:target_id].to_s == t.id.to_s %>><%= h(t.name) %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-md-5">
+      <select class="form-select" name="engine_id" required>
+        <option value="">Select engine&hellip;</option>
+        <% @engines.each do |e| %>
+          <option value="<%= e.id %>"><%= h(e.name) %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">Launch</button></div>
+  </form>
+  <% if @targets.empty? %><p class="text-warning mt-2 mb-0">Add a target first.</p><% end %>
+</div>
+
+<table class="table table-sm">
+  <thead><tr><th>ID</th><th>Target</th><th>Engine</th><th>Status</th><th>Started</th><th>Finished</th></tr></thead>
+  <tbody>
+  <% @scans.each do |s| %>
+    <tr>
+      <td><a href="/scans/<%= s.id %>">#<%= s.id %></a></td>
+      <td><%= h(s.target.name) %></td>
+      <td><%= h(s.engine.name) %></td>
+      <td><span class="badge badge-status-<%= s.status %>"><%= s.status %></span></td>
+      <td><%= s.started_at %></td>
+      <td><%= s.finished_at %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

@@ -49,3 +49,4 @@ gem install selenium-webdriver
 gem install fileutils
 echo -e "$OKO + -- --=[ Done! $RESET"
 echo -e "$OKO + -- --=[ To run, type 'ruby reco.rb -h'! $RESET"
+echo -e "$OKO + -- --=[ Optional: to also install the web dashboard (dashboard/), run install_dashboard.sh $RESET"

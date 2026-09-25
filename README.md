@@ -13,6 +13,7 @@ A recon tool for pentester's with a simple command line.  [![GitHub followers](h
   > - Subdomain enumeration (passive via crt.sh certificate transparency + active DNS bruteforce)
   > - DNS record recon (A/AAAA/MX/NS/TXT/CNAME/SOA)
   > - HTTP technology/CMS fingerprinting (Server header, X-Powered-By, page title, common CMS signatures) on portscan & vhostfind results
+  > - Optional web dashboard (`dashboard/`) with reNgine-style YAML scan-engine pipelines and Axiom-style distributed execution across an SSH host pool, with a live UI — see `dashboard/README.md`
 ### Upcoming features:-
 > - Deep recon interface, some common exploits.
 ### Installation & Usage

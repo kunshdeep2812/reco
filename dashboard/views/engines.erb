@@ -1,0 +1,23 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Scan engines</h1>
+  <a class="btn btn-primary" href="/engines/new">New engine</a>
+</div>
+<p class="text-muted">A scan engine is a YAML pipeline of stages. Each stage names a <code>tool</code> (see the list below) and is dispatched to one host from your pool. Available tool keys: <%= tool_options.map { |k| "<code>#{k}</code>" }.join(', ') %></p>
+
+<table class="table table-sm">
+  <thead><tr><th>Name</th><th>Stages</th><th></th></tr></thead>
+  <tbody>
+  <% @engines.each do |e| %>
+    <tr>
+      <td><%= h(e.name) %></td>
+      <td><%= e.stages.map { |s| s['tool'] }.join(' &rarr; ') %></td>
+      <td>
+        <a class="btn btn-sm btn-outline-light" href="/engines/<%= e.id %>/edit">Edit</a>
+        <form method="post" action="/engines/<%= e.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this engine?')">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

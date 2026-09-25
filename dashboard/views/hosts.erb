@@ -1,0 +1,64 @@
+<h1 class="mb-4">Hosts (worker pool)</h1>
+<p class="text-muted">Scan stages are distributed round-robin across these hosts, executed over SSH. Add the VPS instances you control here — reco is not going to provision cloud infrastructure for you, this is a pool of hosts you already have.</p>
+
+<div class="card p-3 mb-4">
+  <h5>Add host</h5>
+  <form method="post" action="/hosts" class="row g-2">
+    <div class="col-md-2"><input class="form-control" name="name" placeholder="name" required></div>
+    <div class="col-md-3"><input class="form-control" name="address" placeholder="address / IP" required></div>
+    <div class="col-md-1"><input class="form-control" name="port" placeholder="22" value="22"></div>
+    <div class="col-md-2"><input class="form-control" name="ssh_user" placeholder="ssh user" value="root"></div>
+    <div class="col-md-2">
+      <select class="form-select" name="auth_method" id="auth_method" onchange="toggleAuth()">
+        <option value="key">SSH key</option>
+        <option value="password">Password</option>
+      </select>
+    </div>
+    <div class="col-md-2"><input class="form-control" name="remote_path" placeholder="~/reco (remote checkout path)" value="~/reco"></div>
+    <div class="col-md-4" id="key_field"><input class="form-control" name="key_path" placeholder="/home/you/.ssh/id_ed25519"></div>
+    <div class="col-md-4" id="password_field" style="display:none"><input class="form-control" name="password" type="password" placeholder="password (encrypted at rest)"></div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">Add host</button></div>
+  </form>
+</div>
+<script>
+function toggleAuth() {
+  var m = document.getElementById('auth_method').value;
+  document.getElementById('key_field').style.display = (m === 'key') ? '' : 'none';
+  document.getElementById('password_field').style.display = (m === 'password') ? '' : 'none';
+}
+</script>
+
+<table class="table table-sm">
+  <thead><tr><th>Name</th><th>Address</th><th>Auth</th><th>Remote path</th><th>Status</th><th></th></tr></thead>
+  <tbody>
+  <% @hosts.each do |host| %>
+    <tr>
+      <td><%= h(host.name) %><% if host.local? %> <span class="badge bg-secondary">local</span><% end %></td>
+      <td><%= h(host.address) %>:<%= host.port %></td>
+      <td><%= host.auth_method %></td>
+      <td><code><%= h(host.remote_path) %></code></td>
+      <td><span id="status-<%= host.id %>" class="badge badge-status-<%= host.status == 'online' ? 'completed' : (host.status == 'offline' ? 'failed' : 'queued') %>"><%= host.status %></span></td>
+      <td>
+        <button class="btn btn-sm btn-outline-light" onclick="testHost(<%= host.id %>)">Test</button>
+        <% unless host.local? %>
+        <form method="post" action="/hosts/<%= host.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this host?')">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+<script>
+function testHost(id) {
+  fetch('/hosts/' + id + '/test', { method: 'POST' })
+    .then(r => r.json())
+    .then(data => {
+      var el = document.getElementById('status-' + id);
+      el.textContent = data.ok ? 'online' : 'offline';
+      el.className = 'badge badge-status-' + (data.ok ? 'completed' : 'failed');
+      if (!data.ok) alert('Connection failed: ' + data.message);
+    });
+}
+</script>

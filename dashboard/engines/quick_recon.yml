@@ -1,0 +1,10 @@
+name: quick-recon
+stages:
+  - name: subdomain_enum
+    tool: reco_subenum
+    subtype: passive
+  - name: dns_recon
+    tool: reco_dnsrecon
+  - name: port_scan_top
+    tool: reco_portscan
+    scantype: top

@@ -1,0 +1,12 @@
+# reco CLI output
+/Output/*
+!/Output/Don't delete this folder
+
+# dashboard runtime state (SQLite DB, encryption key, logs) - never commit these
+/dashboard/data/*.sqlite3
+/dashboard/data/*.sqlite3-*
+/dashboard/data/secret.key
+/dashboard/logs/*.log
+
+*.gem
+.bundle/

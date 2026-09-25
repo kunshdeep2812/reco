@@ -1,0 +1,25 @@
+
+Optional: the web dashboard (reNgine-style scan engines + Axiom-style SSH
+distribution). The core reco CLI does not need any of this.
+
+--------------------------------------------------ruby gem requirements-----------------------------------------------
+
+gem install sinatra
+gem install sinatra-contrib
+gem install puma
+gem install rackup
+gem install sequel
+gem install sqlite3
+gem install net-ssh
+
+--------------------------------------------------external recon tools (optional, per-host)----------------------------
+
+Installed on whichever host(s) actually run a stage — the dashboard host for
+local execution, or each SSH worker for distributed execution. A missing
+tool just makes its stage show "skipped" rather than failing the scan.
+
+  nmap, amass, masscan, gobuster, dirsearch, sqlmap, spiderfoot (sf.py)
+
+Burp Suite integration needs a running Burp Suite Professional/Enterprise
+instance with its REST API enabled (BURP_API_URL / BURP_API_KEY env vars) -
+there is no automatable scanning API in Community Edition.

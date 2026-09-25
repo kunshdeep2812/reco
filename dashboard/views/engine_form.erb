@@ -1,0 +1,26 @@
+<h1 class="mb-4"><%= @engine ? "Edit engine" : "New engine" %></h1>
+
+<form method="post" action="<%= @engine ? "/engines/#{@engine.id}" : '/engines' %>">
+  <div class="mb-3">
+    <label class="form-label">Name</label>
+    <input class="form-control" name="name" value="<%= h(@engine&.name) %>" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Definition (YAML)</label>
+    <textarea class="form-control" name="definition" rows="16" style="font-family:monospace" required><%= @engine ? @engine.definition : <<~YAML
+name: my-engine
+stages:
+  - name: subdomain_enum
+    tool: reco_subenum
+    subtype: full
+  - name: dns_recon
+    tool: reco_dnsrecon
+  - name: port_scan
+    tool: nmap
+    args: "-sV -T4 -p- --min-rate 1000"
+YAML
+%></textarea>
+  </div>
+  <button class="btn btn-primary">Save</button>
+  <a class="btn btn-outline-light" href="/engines">Cancel</a>
+</form>
