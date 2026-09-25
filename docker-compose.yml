@@ -1,0 +1,29 @@
+services:
+  reco-dashboard:
+    build: .
+    ports:
+      - "4567:4567"
+    volumes:
+      # Persists the SQLite DB, the generated encryption key, and the
+      # admin credentials file across container restarts/recreates.
+      - reco-dashboard-data:/app/dashboard/data
+    environment:
+      RECO_DASHBOARD_BIND: "0.0.0.0"
+      # Set these to pin the admin password instead of using the
+      # generated one (check `docker compose logs` for it otherwise).
+      # RECO_DASHBOARD_USER: admin
+      # RECO_DASHBOARD_PASS: change-me
+      # SLACK_WEBHOOK_URL: https://hooks.slack.com/services/...
+      # DISCORD_WEBHOOK_URL: https://discord.com/api/webhooks/...
+      # BURP_API_URL: http://your-burp-host:1337
+      # BURP_API_KEY: your-burp-api-key
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:4567/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  reco-dashboard-data:

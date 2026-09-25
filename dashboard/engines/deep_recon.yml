@@ -1,0 +1,42 @@
+name: deep-recon
+stages:
+  - name: subdomain_enum
+    tool: reco_subenum
+    subtype: full
+  - name: subfinder_enum
+    tool: subfinder
+  - name: dns_recon
+    tool: reco_dnsrecon
+  - name: probe_live_hosts
+    tool: httpx
+    chain_from: subdomain_enum
+    chain_kind: subdomain
+    chain_limit: 25
+    timeout: 120
+  - name: port_scan_chained
+    tool: naabu
+    chain_from: subdomain_enum
+    chain_kind: subdomain
+    chain_limit: 15
+    timeout: 300
+  - name: nuclei_scan
+    tool: nuclei
+    chain_from: subdomain_enum
+    chain_kind: subdomain
+    chain_limit: 15
+    timeout: 600
+  - name: takeover_check
+    tool: subzy
+    chain_from: subdomain_enum
+    chain_kind: subdomain
+    chain_limit: 25
+    timeout: 120
+  - name: waf_check
+    tool: wafw00f
+    timeout: 60
+  - name: whois_lookup
+    tool: whois
+    timeout: 30
+  - name: osint_sweep
+    tool: theharvester
+    timeout: 300

@@ -1,6 +1,6 @@
 
-Optional: the web dashboard (reNgine-style scan engines + Axiom-style SSH
-distribution). The core reco CLI does not need any of this.
+Optional: the web dashboard (YAML scan-engine pipelines distributed across
+an SSH host pool). The core reco CLI does not need any of this.
 
 --------------------------------------------------ruby gem requirements-----------------------------------------------
 

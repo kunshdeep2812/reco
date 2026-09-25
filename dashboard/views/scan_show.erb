@@ -1,6 +1,13 @@
 <div class="d-flex justify-content-between align-items-center mb-2">
   <h1>Scan #<%= @scan.id %> <span id="scan-status" class="badge badge-status-<%= @scan.status %>"><%= @scan.status %></span></h1>
-  <a class="btn btn-outline-light btn-sm" href="/scans/<%= @scan.id %>/findings.csv">Export findings CSV</a>
+  <div>
+    <% if %w[queued running].include?(@scan.status) %>
+      <form method="post" action="/scans/<%= @scan.id %>/cancel" style="display:inline" id="cancel-form" onsubmit="return confirm('Cancel this scan? In-flight stages will be killed.')">
+        <button class="btn btn-outline-danger btn-sm" id="cancel-btn">Cancel scan</button>
+      </form>
+    <% end %>
+    <a class="btn btn-outline-light btn-sm" href="/scans/<%= @scan.id %>/findings.csv">Export findings CSV</a>
+  </div>
 </div>
 <p class="text-muted">Target: <strong><%= h(@scan.target.name) %></strong> &middot; Engine: <strong><%= h(@scan.engine.name) %></strong></p>
 
@@ -8,12 +15,13 @@
   <div class="col-md-6">
     <h5>Stages</h5>
     <table class="table table-sm">
-      <thead><tr><th>Stage</th><th>Tool</th><th>Host</th><th>Status</th></tr></thead>
+      <thead><tr><th>Stage</th><th>Tool</th><th>Target</th><th>Host</th><th>Status</th></tr></thead>
       <tbody id="task-table">
         <% @tasks.each do |t| %>
           <tr id="task-row-<%= t.id %>">
-            <td><%= h(t.stage_name) %></td>
+            <td><%= h(t.stage_name) %><% if t.parent_task_id %> <span class="text-muted" title="chained from stage #<%= t.parent_task_id %>">&#8618;</span><% end %></td>
             <td><code><%= h(t.tool) %></code></td>
+            <td class="text-muted"><%= h(t.target_value) %></td>
             <td><%= t.host ? h(t.host.name) : 'local' %></td>
             <td><span id="task-status-<%= t.id %>" class="badge badge-status-<%= t.status %>"><%= t.status %></span></td>
           </tr>
@@ -45,7 +53,9 @@
   var taskTable = document.getElementById('task-table');
   var findingsTable = document.getElementById('findings-table');
   var findingsCount = document.getElementById('findings-count');
+  var cancelForm = document.getElementById('cancel-form');
   var count = <%= @findings.count %>;
+  var TERMINAL = ['completed', 'failed', 'cancelled'];
 
   function setBadge(el, status) {
     el.textContent = status;
@@ -57,13 +67,16 @@
     log.scrollTop = log.scrollHeight;
   }
 
-  if (!!window.EventSource && '<%= @scan.status %>' !== 'completed' && '<%= @scan.status %>' !== 'failed') {
+  if (!!window.EventSource && TERMINAL.indexOf('<%= @scan.status %>') === -1) {
     var es = new EventSource('/scans/' + scanId + '/stream');
     es.onmessage = function(evt) {
       var data = JSON.parse(evt.data);
       if (data.type === 'scan_status') {
         setBadge(scanStatus, data.status);
-        if (data.status === 'completed' || data.status === 'failed') es.close();
+        if (TERMINAL.indexOf(data.status) !== -1) {
+          es.close();
+          if (cancelForm) cancelForm.style.display = 'none';
+        }
       } else if (data.type === 'task') {
         var row = document.getElementById('task-row-' + data.task.id);
         if (!row) {
@@ -71,13 +84,14 @@
           row.id = 'task-row-' + data.task.id;
           var tdStage = document.createElement('td'); tdStage.textContent = data.task.stage_name;
           var tdTool = document.createElement('td'); var code = document.createElement('code'); code.textContent = data.task.tool; tdTool.appendChild(code);
+          var tdTarget = document.createElement('td'); tdTarget.className = 'text-muted'; tdTarget.textContent = data.task.target_value || '';
           var tdHost = document.createElement('td'); tdHost.textContent = data.task.host_id || 'local';
           var tdStatus = document.createElement('td'); var badge = document.createElement('span');
           badge.id = 'task-status-' + data.task.id;
           badge.className = 'badge badge-status-' + data.task.status;
           badge.textContent = data.task.status;
           tdStatus.appendChild(badge);
-          row.appendChild(tdStage); row.appendChild(tdTool); row.appendChild(tdHost); row.appendChild(tdStatus);
+          row.appendChild(tdStage); row.appendChild(tdTool); row.appendChild(tdTarget); row.appendChild(tdHost); row.appendChild(tdStatus);
           taskTable.appendChild(row);
         }
       } else if (data.type === 'task_update') {

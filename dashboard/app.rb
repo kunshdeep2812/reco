@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-# reco dashboard: reNgine-style scan engine pipelines + Axiom-style
-# distributed execution across an SSH host pool, with a live web UI.
+# reco dashboard: YAML scan engine pipelines distributed across an SSH
+# host pool, with a live web UI.
 $LOAD_PATH.unshift(File.expand_path('lib', __dir__))
 
 require 'sinatra'
@@ -9,12 +9,17 @@ require 'json'
 require 'csv'
 require 'yaml'
 
+require 'rack/auth/basic'
+
 require 'models'
 require 'tools'
 require 'executor'
 require 'dispatcher'
 require 'broadcaster'
+require 'scheduler'
 require_relative 'lib/crypto'
+require_relative 'lib/credentials'
+require_relative 'lib/osint_resources'
 
 set :views, File.expand_path('views', __dir__)
 set :public_folder, File.expand_path('public', __dir__)
@@ -26,13 +31,27 @@ set :show_exceptions, false
 # (Puma is threaded, not evented), so keep a generous pool.
 set :server_settings, { Threads: '4:32' }
 
-# Optional HTTP basic auth. This dashboard can trigger remote command
-# execution across every host you add to it, so if you bind it to
-# anything other than localhost, set RECO_DASHBOARD_USER/PASS.
-if ENV['RECO_DASHBOARD_USER'] && ENV['RECO_DASHBOARD_PASS']
-  use Rack::Auth::Basic, 'reco dashboard' do |user, pass|
-    user == ENV['RECO_DASHBOARD_USER'] && pass == ENV['RECO_DASHBOARD_PASS']
+# Auth is always on: this dashboard can execute commands across every host
+# in its pool, so there is no "run with no password" mode. Set
+# RECO_DASHBOARD_USER/PASS yourself, or a random password is generated
+# once and persisted to dashboard/data/admin_credentials.txt.
+CREDENTIALS = Credentials.resolve
+if CREDENTIALS[:source] == :generated
+  warn "reco dashboard: generated admin credentials -> user=#{CREDENTIALS[:user]} pass=#{CREDENTIALS[:pass]}"
+  warn "reco dashboard: saved to #{Credentials::CREDENTIALS_FILE} (override with RECO_DASHBOARD_USER/PASS)"
+end
+before do
+  next if request.path_info == '/health' # unauthenticated so container/LB healthchecks work
+  auth = Rack::Auth::Basic::Request.new(request.env)
+  unless auth.provided? && auth.basic? && auth.credentials == [CREDENTIALS[:user], CREDENTIALS[:pass]]
+    response['WWW-Authenticate'] = 'Basic realm="reco dashboard"'
+    halt 401, 'Authorization required'
   end
+end
+
+get '/health' do
+  content_type :json
+  { status: 'ok' }.to_json
 end
 
 configure do
@@ -55,6 +74,8 @@ configure do
       Engine.create(name: parsed['name'], definition: yaml, created_at: Time.now)
     end
   end
+
+  Scheduler.start! unless ENV['RECO_DISABLE_SCHEDULER']
 end
 
 helpers do
@@ -111,6 +132,7 @@ post '/hosts/:id/delete' do
   host = Host[params[:id].to_i]
   halt 404 unless host
   halt 400, 'Cannot delete the local execution host' if host.local? && Host.where(auth_method: 'local').count <= 1
+  halt 400, 'Cannot delete a host that has run scan tasks (their history references it)' if ScanTask.where(host_id: host.id).count.positive?
   host.destroy
   redirect '/hosts'
 end
@@ -129,6 +151,7 @@ end
 post '/targets/:id/delete' do
   target = Target[params[:id].to_i]
   halt 404 unless target
+  halt 400, 'Cannot delete a target that has scans or schedules; delete those first' if Scan.where(target_id: target.id).count.positive? || ScheduledScan.where(target_id: target.id).count.positive?
   target.destroy
   redirect '/targets'
 end
@@ -165,6 +188,7 @@ end
 post '/engines/:id/delete' do
   engine = Engine[params[:id].to_i]
   halt 404 unless engine
+  halt 400, 'Cannot delete an engine that has scans or schedules; delete those first' if Scan.where(engine_id: engine.id).count.positive? || ScheduledScan.where(engine_id: engine.id).count.positive?
   engine.destroy
   redirect '/engines'
 end
@@ -194,6 +218,14 @@ get '/scans/:id' do
   erb :scan_show
 end
 
+post '/scans/:id/cancel' do
+  scan = Scan[params[:id].to_i]
+  halt 404 unless scan
+  scan.update(cancel_requested: true)
+  Broadcaster.publish(scan.id, { type: 'scan_status', status: scan.status, message: 'Cancellation requested' })
+  redirect "/scans/#{scan.id}"
+end
+
 get '/scans/:id/stream' do
   scan_id = params[:id].to_i
   halt 404 unless Scan[scan_id]
@@ -215,7 +247,7 @@ get '/scans/:id/stream' do
           next
         end
         out << "data: #{event.to_json}\n\n"
-        break if event[:type] == 'scan_status' && %w[completed failed].include?(event[:status])
+        break if event[:type] == 'scan_status' && %w[completed failed cancelled].include?(event[:status])
       end
     rescue StandardError, IOError
       # client disconnected or the connection errored out; fall through to cleanup
@@ -245,4 +277,46 @@ get '/findings' do
   @findings = ds.limit(500).all
   @kinds = Finding.distinct.select_map(:kind)
   erb :findings
+end
+
+# ----------------------------------------------------------------- schedules
+get '/schedules' do
+  @schedules = ScheduledScan.order(Sequel.desc(:id)).all
+  @targets = Target.all
+  @engines = Engine.all
+  erb :schedules
+end
+
+post '/schedules' do
+  target = Target[params[:target_id].to_i]
+  engine = Engine[params[:engine_id].to_i]
+  halt 400, 'Invalid target or engine' unless target && engine
+  schedule_type = params[:schedule_type] == 'daily' ? 'daily' : 'interval'
+  ScheduledScan.create(
+    target_id: target.id, engine_id: engine.id, schedule_type: schedule_type,
+    interval_minutes: (schedule_type == 'interval' ? params[:interval_minutes].to_i : nil),
+    daily_at: (schedule_type == 'daily' ? params[:daily_at] : nil),
+    active: true, created_at: Time.now
+  )
+  redirect '/schedules'
+end
+
+post '/schedules/:id/toggle' do
+  s = ScheduledScan[params[:id].to_i]
+  halt 404 unless s
+  s.update(active: !s.active)
+  redirect '/schedules'
+end
+
+post '/schedules/:id/delete' do
+  s = ScheduledScan[params[:id].to_i]
+  halt 404 unless s
+  s.destroy
+  redirect '/schedules'
+end
+
+# ------------------------------------------------------------------- osint
+get '/osint' do
+  @categories = OsintResources::CATEGORIES
+  erb :osint
 end

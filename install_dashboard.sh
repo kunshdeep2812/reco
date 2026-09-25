@@ -18,3 +18,5 @@ gem install sqlite3
 gem install net-ssh
 echo -e "$OKG + -- --=[ Done! Run: cd dashboard && ruby app.rb $RESET"
 echo -e "$OKG + -- --=[ Then open http://127.0.0.1:4567 (binds to localhost only by default) $RESET"
+echo -e "$OKG + -- --=[ First boot prints a generated admin password - auth is always on. $RESET"
+echo -e "$OKG + -- --=[ Or: docker compose up --build   /   cd dashboard && rake test $RESET"
