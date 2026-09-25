@@ -2,6 +2,7 @@ require 'httparty'
 require 'fileutils'
 require 'colorize'
 require 'ruby-progressbar'
+require './modules/fingerprint.rb'
 $VERBOSE = nil
 class ThreadPoolm01
   def initialize(size)
@@ -108,7 +109,7 @@ class Vhfind1
         end
         timestmp = Time.now.utc.strftime("%Y-%m-%d")
         $path1 = "./Output/#{$outp1}:#{timestmp}"
-        folderdir1 = FileUtils.mkdir_p($path1) unless File.exists?($path1)
+        folderdir1 = FileUtils.mkdir_p($path1) unless File.exist?($path1)
         fln1 = File.readlines(filen1)
         if main_domain_file !=nil
           fln2 = File.readlines(main_domain_file)
@@ -193,7 +194,7 @@ class Vhfind1
                      rr3 = " Response headers"
                      rr4 = "\tStatus Code: #{response.code}: "+"\t"+"#{line}"
                     File.open("#{$path1}/#{$outp1}", "a") do |f|     
-                      f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n")   
+                      f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n"+"\tFingerprint:-\n"+"\t\t#{Fingerprint.identify(response) rescue "Unknown"}\n\n")
                     end
                 rescue => e
                   #$progressbar.log "#{line}.#{m_domain}:#{e}"
@@ -212,7 +213,7 @@ class Vhfind1
                      rr3 = " Response headers"
                      rr4 = "\tStatus Code: #{response.code}: "+"\t"+"#{line}"
                     File.open("#{$path1}/#{$outp1}", "a") do |f|     
-                      f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n")   
+                      f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n"+"\tFingerprint:-\n"+"\t\t#{Fingerprint.identify(response) rescue "Unknown"}\n\n")
                     end
                   rescue => e
                       #$progressbar.log "#{line}.#{m_domain}:#{e}"
@@ -285,7 +286,7 @@ class Vhfind1
                        rr3 = " Response headers"
                        rr4 = "\tStatus Code: #{response.code}: "+"\t"+"#{line}.#{m_domain}"
                       File.open("#{$path1}/#{$outp1}", "a") do |f|     
-                        f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n")   
+                        f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n"+"\tFingerprint:-\n"+"\t\t#{Fingerprint.identify(response) rescue "Unknown"}\n\n")
                       end
                   rescue => e
                     #$progressbar.log "#{line}.#{m_domain}:#{e}"
@@ -304,7 +305,7 @@ class Vhfind1
                        rr3 = " Response headers"
                        rr4 = "\tStatus Code: #{response.code}: "+"\t"+"#{line}.#{m_domain}"
                       File.open("#{$path1}/#{$outp1}", "a") do |f|     
-                        f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n")   
+                        f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n"+"\tFingerprint:-\n"+"\t\t#{Fingerprint.identify(response) rescue "Unknown"}\n\n")
                       end
                     rescue => e
                         #$progressbar.log "#{line}.#{m_domain}:#{e}"
@@ -383,7 +384,7 @@ class Vhfind1
                    rr3 = " Response headers"
                    rr4 = "\tStatus Code: #{response.code}: "+"\t"+"#{line}.#{m_domain}"
                   File.open("#{$path1}/#{$outp1}", "a") do |f|     
-                    f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n")   
+                    f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n"+"\tFingerprint:-\n"+"\t\t#{Fingerprint.identify(response) rescue "Unknown"}\n\n")
                   end
               rescue => e
                 #puts "#{line}.#{m_domain}:#{e}"
@@ -402,7 +403,7 @@ class Vhfind1
                    rr3 = " Response headers"
                    rr4 = "\tStatus Code: #{response.code}: "+"\t"+"#{line}.#{m_domain}"
                   File.open("#{$path1}/#{$outp1}", "a") do |f|     
-                    f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n")   
+                    f.write("\n-----------------------------------------------------------------------------------------------\n"+"\n#{response.code}[Body Content-length: #{response.body.length}]\n"+"\t#{rr1}:-\n"+"\t\t#{rr2}\n"+"\t\t#{headers.each do |v, t| end}\n\n"+"\t#{rr3}:-\n"+"\t#{rr4}\n"+"\t\t#{tttq.each do |v, t|end}\n\n"+"\tFingerprint:-\n"+"\t\t#{Fingerprint.identify(response) rescue "Unknown"}\n\n")
                   end
                 rescue => e
                   #puts "#{line}.#{m_domain}:#{e}"

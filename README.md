@@ -10,8 +10,11 @@ A recon tool for pentester's with a simple command line.  [![GitHub followers](h
   > - Echo test of websocket to check cross site websocket hijacking
   > - Deep Redirection url check
   > - Working domain Screenshot's
+  > - Subdomain enumeration (passive via crt.sh certificate transparency + active DNS bruteforce)
+  > - DNS record recon (A/AAAA/MX/NS/TXT/CNAME/SOA)
+  > - HTTP technology/CMS fingerprinting (Server header, X-Powered-By, page title, common CMS signatures) on portscan & vhostfind results
 ### Upcoming features:-
-> - Subdomain finder, deep recon interface, some common exploits.
+> - Deep recon interface, some common exploits.
 ### Installation & Usage
 ```sh
 git clone https://github.com/kunshdeep2812/reco.git
@@ -31,6 +34,8 @@ How to use: reco.rb --script portscan --ip 192.168.0.6 --scantype custom -p 80,4
 How to use: reco.rb --script rangescan -r 192.168.0.1/24 -o test.csv --thread 10
 How to use: reco.rb --script portscan --iL /home/test/example.txt --randomagent true --thread 50 -o example.txt
 How to use: reco.rb --script echotest --socketurl wss://example.com
+How to use: reco.rb --script subenum -d example.com --subtype full --thread 30 -o example.txt
+How to use: reco.rb --script dnsrecon -d example.com -o example.txt
 How to use: reco.rb --help
 
 For more please check the commands.txt file
@@ -64,11 +69,30 @@ Options:
                                                                                                                                                                       
     -p, --port                       Provide single or multiple port to scan
                                                                                                                                                                       
+        --subtype                    Provide subdomain enum type (passive, active, full)
+                                                                                                                                                                      
+        --nameserver                 Provide custom DNS nameserver for dnsrecon
+                                                                                                                                                                      
     -h, --help                       Help Menu
                                                                                                                                                                       
         --scriptlist                 List of scripts or modules
 
 ```
+
+### New recon scripts
+```ruby
+# Subdomain enumeration: passive (crt.sh certificate transparency) + active (DNS bruteforce)
+ruby reco.rb --script subenum -d example.com --subtype full -w wordlist/host_word_list.txt --thread 30 -o subs.txt
+
+# Passive only / active only
+ruby reco.rb --script subenum -d example.com --subtype passive -o subs.txt
+ruby reco.rb --script subenum -d example.com --subtype active --thread 50 -o subs.txt
+
+# DNS record recon (A/AAAA/MX/NS/TXT/CNAME/SOA)
+ruby reco.rb --script dnsrecon -d example.com -o dns.txt
+ruby reco.rb --script dnsrecon -d example.com --nameserver 1.1.1.1
+```
+Portscan and vhostfind results now also carry an HTTP fingerprint (Server header, X-Powered-By, page title, common CMS/framework signatures) alongside status codes.
 ### Operating Systems supported
 > - Linux
 ###### Note:- 

@@ -115,7 +115,7 @@ end
       r1 = ips.length
      # timestmp = Time.now.utc.strftime("%Y-%m-%d")
       #path = "../screenshot/#{r1}:#{timestmp}"
-      #folderdir = FileUtils.mkdir_p(path) unless File.exists?(path)
+      #folderdir = FileUtils.mkdir_p(path) unless File.exist?(path)
     elsif cid !=nil
       ips1 = IPAddress.parse "#{cid}"
       f1 = ips1.first.to_s
@@ -124,13 +124,13 @@ end
       r1 = ips.length
       #timestmp = Time.now.utc.strftime("%Y-%m-%d")
      # path = "../screenshot/#{r1}:#{timestmp}"
-     # folderdir = FileUtils.mkdir_p(path) unless File.exists?(path)
+     # folderdir = FileUtils.mkdir_p(path) unless File.exist?(path)
     elsif $ffname !=nil
     ips = File.readlines($ffname)
     r1 = ips.length
     #timestmp = Time.now.utc.strftime("%Y-%m-%d")
     #path = "../screenshot/#{r1}:#{timestmp}"
-   # folderdir = FileUtils.mkdir_p(path) unless File.exists?(path)
+   # folderdir = FileUtils.mkdir_p(path) unless File.exist?(path)
     end
 
     if $file1 !=nil
@@ -140,8 +140,8 @@ end
       timestmp = Time.now.utc.strftime("%Y-%m-%d")
       path = "./screenshot/#{$file1}:#{timestmp}"
       path1 = "./Output/#{$file1}:#{timestmp}"
-      folderdir = FileUtils.mkdir_p(path) unless File.exists?(path)
-      folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
+      folderdir = FileUtils.mkdir_p(path) unless File.exist?(path)
+      folderdir1 = FileUtils.mkdir_p(path1) unless File.exist?(path1)
     csv1 = CSV.open("#{path1}/#{$file1}", "a")
     csv1 << ['Domain','Screenshot-name','Redirect url']
     when $r2
@@ -149,8 +149,8 @@ end
     timestmp = Time.now.utc.strftime("%Y-%m-%d")
     path = "./screenshot/#{$file1}:#{timestmp}"
     path1 = "./Output/#{$file1}:#{timestmp}"
-    folderdir = FileUtils.mkdir_p(path) unless File.exists?(path)
-    folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
+    folderdir = FileUtils.mkdir_p(path) unless File.exist?(path)
+    folderdir1 = FileUtils.mkdir_p(path1) unless File.exist?(path1)
     txt1 = File.open("#{path1}/#{$file1}", "a")
     txt1 << "Domain\t\t"+"Screenshot-name\t\t"+" Redirect url"+"\n"
     when $r3

@@ -9,6 +9,8 @@ require './modules/module1.rb'
 require './modules/module2.rb'
 require './modules/module3.rb'
 require './modules/module4.rb'
+require './modules/module5.rb'
+require './modules/module6.rb'
 $VERBOSE = nil
 ban = Banner.new
 ban.banner
@@ -22,6 +24,8 @@ optparse = OptionParser.new do |opts|
   opts.separator "How to use: ".green + "#{$0} ".yellow+"--script rangescan -r 192.168.0.1/24 -o test.csv --thread 10".white
   opts.separator "How to use: ".green + "#{$0} ".yellow+"--script portscan --iL /home/test/example.txt --randomagent true --thread 50 -o example.txt".white
   opts.separator "How to use: ".green + "#{$0} ".yellow+"--script echotest --socketurl wss://example.com".white
+  opts.separator "How to use: ".green + "#{$0} ".yellow+"--script subenum -d example.com --subtype full --thread 30 -o example.txt".white
+  opts.separator "How to use: ".green + "#{$0} ".yellow+"--script dnsrecon -d example.com -o example.txt".white
   opts.separator "How to use: ".green + "#{$0} ".yellow+"--help".white
   opts.separator ""
   opts.separator "For more please check the ".green+"commands.txt".yellow+" file".green
@@ -84,7 +88,15 @@ optparse = OptionParser.new do |opts|
     options[:method14]
     options[:defport] = defport.strip.chomp
   end
-  
+  opts.on('--subtype ', "provide subdomain enum type (passive, active, full)\n".white) do |subtype|
+    options[:method15]
+    options[:subtype] = subtype.strip.chomp
+  end
+  opts.on('--nameserver ', "provide custom DNS nameserver for dnsrecon\n".white) do |nameserver|
+    options[:method16]
+    options[:nameserver] = nameserver.strip.chomp
+  end
+
 script_options = Terminal::Table.new(
 
   rows: [
@@ -92,7 +104,9 @@ script_options = Terminal::Table.new(
     ["vhostscan","To find virtual host of single domain/ip's"],
     ["portscan","To find open ports of single/multiple's domain/ip's"],
     ["echotest","To check if the websocket is vulnerable from Cross-Site WebSocket Hijacking"],
-    ["redirect-scr","To find deep redirection and screenshot of given domain/ip address"]
+    ["redirect-scr","To find deep redirection and screenshot of given domain/ip address"],
+    ["subenum","Subdomain enumeration (passive via crt.sh + active DNS bruteforce)"],
+    ["dnsrecon","Dump A/AAAA/MX/NS/TXT/CNAME/SOA DNS records for a domain"]
   ],
 
   headings: [
@@ -172,6 +186,8 @@ $x11 = options[:thread]
 $x12 = options[:script]
 $x13 = options[:scantype]
 $x14 = options[:defport]
+$x15 = options[:subtype]
+$x16 = options[:nameserver]
   #puts $x1 + $x2
   #websocket hijack
 if $x12 !=nil
@@ -915,6 +931,40 @@ when 'redirect-scr'
       aa = Cswh.new($x8)
       aa.test1
       aa.websocket
+    end
+
+  #Subdomain enumeration module (passive crt.sh + active bruteforce)-----------------------------------------------------
+
+  when 'subenum'
+    if $x4 !=nil
+      bb = Subenum.new
+      bb.domain_name($x4)
+      bb.wordlist_file($x3) if $x3 !=nil
+      bb.thread_count($x11.to_i) if $x11 !=nil
+      bb.txtfile($x5) if $x5 !=nil
+      bb.subtype($x15) if $x15 !=nil
+      bb.enum
+    else
+      puts "\tWarning: ".red+"Provide a domain with -d for subenum"
+      puts
+      puts "\tUsage: ruby #{$0} ".white + "--script subenum -d example.com --subtype full --thread 30 -o example.txt".white
+      puts
+    end
+
+  #DNS record recon module-----------------------------------------------------------------------------------------------
+
+  when 'dnsrecon'
+    if $x4 !=nil
+      cc = Dnsrecon.new
+      cc.domain_name($x4)
+      cc.txtfile($x5) if $x5 !=nil
+      cc.nameserver($x16) if $x16 !=nil
+      cc.lookup
+    else
+      puts "\tWarning: ".red+"Provide a domain with -d for dnsrecon"
+      puts
+      puts "\tUsage: ruby #{$0} ".white + "--script dnsrecon -d example.com -o example.txt".white
+      puts
     end
   else
     puts "\tThe script or as doesn't exist\n"

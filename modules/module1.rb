@@ -7,6 +7,7 @@ require 'colorize'
 require 'timeout'
 require 'fileutils'
 require 'ruby-progressbar'
+require './modules/fingerprint.rb'
 
 $VERBOSE = nil
 class ThreadPoolm11
@@ -132,16 +133,16 @@ class Cidrportscanner
             when $r1
               timestmp = Time.now.utc.strftime("%Y-%m-%d")
               path1 = "./Output/#{$file1}:#{timestmp}"
-              folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
+              folderdir1 = FileUtils.mkdir_p(path1) unless File.exist?(path1)
               csv1 = CSV.open("#{path1}/#{$file1}", "a")
-              csv1 << ['Status code','IP address with port number']
+              csv1 << ['Status code','IP address with port number','Fingerprint']
             when $r2
               #puts "file extension is txt"
               timestmp = Time.now.utc.strftime("%Y-%m-%d")
               path1 = "./Output/#{$file1}:#{timestmp}"
-              folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
+              folderdir1 = FileUtils.mkdir_p(path1) unless File.exist?(path1)
               txt1 = File.open("#{path1}/#{$file1}", "a")
-              txt1 << "Status code\t"+"IP address with port number"+"\n"
+              txt1 << "Status code\t"+"IP address with port number\t\t"+"Fingerprint"+"\n"
             when $r3
               puts "PDF will not generate with this script"
               exit
@@ -260,12 +261,13 @@ class Cidrportscanner
                     response = HTTParty.get("http://#{domain}:#{port}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 5)
                   end
                   #$progressbar.log headers
-                  $progressbar.log"\tWeb Portal: ".yellow+"#{domain}:".white+""+"#{port}".green
+                  fp = Fingerprint.identify(response)
+                  $progressbar.log"\tWeb Portal: ".yellow+"#{domain}:".white+""+"#{port}".green+"\t"+"#{fp}"
                   case $file1
                   when $r1
-                      csv1 << ["#{response.code}","#{domain}:#{port}"]
+                      csv1 << ["#{response.code}","#{domain}:#{port}","#{fp}"]
                   when $r2
-                  txt1 << "#{response.code}\t"+"#{domain}:#{port}"+"\n"
+                  txt1 << "#{response.code}\t"+"#{domain}:#{port}\t\t"+"#{fp}"+"\n"
                   else
                 end
                 $a = $a + 1
@@ -281,12 +283,13 @@ class Cidrportscanner
                   else
                     response = HTTParty.get("https://#{domain}:#{port}", :headers => headers, :ciphers => 'HIGH:!DH:!aNULL', :verify => false, timeout: 5)
                   end
-                  $progressbar.log"\tWeb Portal: ".yellow+"#{domain}:".white+""+"#{port}".green
+                  fp = Fingerprint.identify(response)
+                  $progressbar.log"\tWeb Portal: ".yellow+"#{domain}:".white+""+"#{port}".green+"\t"+"#{fp}"
                     case $file1
                     when $r1
-                        csv1 << ["#{response.code}","#{domain}:#{port}"]
+                        csv1 << ["#{response.code}","#{domain}:#{port}","#{fp}"]
                     when $r2
-                    txt1 << "#{response.code}\t"+"#{domain}:#{port}"+"\n"
+                    txt1 << "#{response.code}\t"+"#{domain}:#{port}\t\t"+"#{fp}"+"\n"
                     else
                   end
                   $a = $a + 1

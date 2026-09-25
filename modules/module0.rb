@@ -130,7 +130,7 @@ class Rangescanner
         when $r1
           timestmp = Time.now.utc.strftime("%Y-%m-%d")
           path1 = "./Output/#{$file1}:#{timestmp}"
-          folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
+          folderdir1 = FileUtils.mkdir_p(path1) unless File.exist?(path1)
           csv1 = CSV.open("#{path1}/#{$file1}", "a")
           csv1 << ['Status code','IP address','IP address Detail']
 
@@ -138,7 +138,7 @@ class Rangescanner
           #puts "file extension is txt"
           timestmp = Time.now.utc.strftime("%Y-%m-%d")
           path1 = "./Output/#{$file1}:#{timestmp}"
-          folderdir1 = FileUtils.mkdir_p(path1) unless File.exists?(path1)
+          folderdir1 = FileUtils.mkdir_p(path1) unless File.exist?(path1)
           txt1 = File.open("#{path1}/#{$file1}", "a")
           txt1 << "Status code\t"+"IP address\t\t"+"IP address Detail"+"\n"
         when $r3
