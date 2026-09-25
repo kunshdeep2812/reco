@@ -1,0 +1,30 @@
+name: full-recon
+stages:
+  - name: subdomain_enum
+    tool: reco_subenum
+    subtype: full
+  - name: dns_recon
+    tool: reco_dnsrecon
+  - name: amass_passive
+    tool: amass
+    timeout: 600
+  - name: nmap_scan
+    tool: nmap
+    args: "-sV -T4 -p- --min-rate 1000"
+    timeout: 1800
+  - name: masscan_scan
+    tool: masscan
+    args: "-p1-65535 --rate 1000"
+    timeout: 900
+  - name: dir_bruteforce
+    tool: gobuster
+    timeout: 900
+  - name: nuclei_scan
+    tool: nuclei
+    timeout: 1200
+  - name: sqlmap_probe
+    tool: sqlmap
+    timeout: 900
+  - name: osint_sweep
+    tool: spiderfoot
+    timeout: 600

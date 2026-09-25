@@ -1,0 +1,28 @@
+<h1 class="mb-4">Targets</h1>
+
+<div class="card p-3 mb-4">
+  <h5>Add target</h5>
+  <form method="post" action="/targets" class="row g-2">
+    <div class="col-md-4"><input class="form-control" name="name" placeholder="domain or IP" required></div>
+    <div class="col-md-6"><input class="form-control" name="notes" placeholder="notes (scope, engagement id, ...)"></div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">Add target</button></div>
+  </form>
+</div>
+
+<table class="table table-sm">
+  <thead><tr><th>Name</th><th>Notes</th><th></th></tr></thead>
+  <tbody>
+  <% @targets.each do |t| %>
+    <tr>
+      <td><%= h(t.name) %></td>
+      <td class="text-muted"><%= h(t.notes) %></td>
+      <td>
+        <a class="btn btn-sm btn-outline-light" href="/scans?target_id=<%= t.id %>">Scan</a>
+        <form method="post" action="/targets/<%= t.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this target?')">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

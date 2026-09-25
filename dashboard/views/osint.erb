@@ -1,0 +1,17 @@
+<h1 class="mb-2">OSINT resources</h1>
+<p class="text-muted mb-4">A quick-reference list of well-known public OSINT tools by category, for the parts of recon that aren't a single command to automate. This is a bookmarks page, not a scanner — nothing here runs from the dashboard.</p>
+
+<div class="row row-cols-1 row-cols-md-2 g-3">
+  <% @categories.each do |cat| %>
+    <div class="col">
+      <div class="card p-3 h-100">
+        <h5><%= h(cat[:title]) %></h5>
+        <ul class="mb-0">
+          <% cat[:items].each do |item| %>
+            <li><a href="<%= item[:url] %>" target="_blank" rel="noopener noreferrer"><%= h(item[:name]) %></a> <span class="text-muted">&mdash; <%= h(item[:note]) %></span></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>

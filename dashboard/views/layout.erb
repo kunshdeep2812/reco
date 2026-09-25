@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>reco dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { background:#0f1115; color:#e6e6e6; }
+    .navbar { background:#161a21 !important; border-bottom:1px solid #2a2f3a; }
+    .card, table { background:#161a21; color:#e6e6e6; border-color:#2a2f3a; }
+    .table { color:#e6e6e6; }
+    .table > :not(caption) > * > * { background-color:#161a21; color:#e6e6e6; border-color:#2a2f3a; }
+    a { color:#7dd3fc; }
+    .badge-status-queued { background:#6c757d; }
+    .badge-status-running { background:#0d6efd; }
+    .badge-status-completed { background:#198754; }
+    .badge-status-failed { background:#dc3545; }
+    .badge-status-skipped { background:#8a6d3b; }
+    .badge-status-cancelled { background:#495057; }
+    .badge-status-timeout { background:#fd7e14; }
+    pre.log { background:#05070a; color:#c9f7c9; padding:1rem; border-radius:.5rem; max-height:480px; overflow:auto; font-size:.82rem; }
+    .form-control, .form-select { background:#0f1115; color:#e6e6e6; border-color:#2a2f3a; }
+    .form-control:focus, .form-select:focus { background:#0f1115; color:#e6e6e6; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">reco</a>
+      <div class="navbar-nav">
+        <a class="nav-link" href="/">Overview</a>
+        <a class="nav-link" href="/targets">Targets</a>
+        <a class="nav-link" href="/hosts">Hosts</a>
+        <a class="nav-link" href="/engines">Engines</a>
+        <a class="nav-link" href="/scans">Scans</a>
+        <a class="nav-link" href="/schedules">Schedules</a>
+        <a class="nav-link" href="/findings">Findings</a>
+        <a class="nav-link" href="/osint">OSINT resources</a>
+      </div>
+    </div>
+  </nav>
+  <div class="container pb-5">
+    <%= yield %>
+  </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<h1 class="mb-4">Overview</h1>
+<div class="row g-3 mb-4">
+  <div class="col-md-3"><div class="card p-3"><div class="fs-2"><%= @targets.count %></div>Targets</div></div>
+  <div class="col-md-3"><div class="card p-3"><div class="fs-2"><%= @hosts.count %></div>Hosts</div></div>
+  <div class="col-md-3"><div class="card p-3"><div class="fs-2"><%= @engines.count %></div>Engines</div></div>
+  <div class="col-md-3"><div class="card p-3"><div class="fs-2"><%= Scan.count %></div>Scans</div></div>
+</div>
+
+<h4>Recent scans</h4>
+<table class="table table-sm">
+  <thead><tr><th>ID</th><th>Target</th><th>Engine</th><th>Status</th><th>Started</th></tr></thead>
+  <tbody>
+  <% @scans.each do |s| %>
+    <tr>
+      <td><a href="/scans/<%= s.id %>">#<%= s.id %></a></td>
+      <td><%= h(s.target.name) %></td>
+      <td><%= h(s.engine.name) %></td>
+      <td><span class="badge badge-status-<%= s.status %>"><%= s.status %></span></td>
+      <td><%= s.started_at %></td>
+    </tr>
+  <% end %>
+  <% if @scans.empty? %><tr><td colspan="5" class="text-muted">No scans yet — add a target and launch one from the Scans page.</td></tr><% end %>
+  </tbody>
+</table>

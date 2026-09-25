@@ -1,0 +1,61 @@
+<h1 class="mb-4">Schedules</h1>
+<p class="text-muted">Recurring scans, checked every 30 seconds by the dashboard's background scheduler. A new schedule runs once as soon as it's created, then on the interval you set.</p>
+
+<div class="card p-3 mb-4">
+  <h5>Add schedule</h5>
+  <form method="post" action="/schedules" class="row g-2">
+    <div class="col-md-3">
+      <select class="form-select" name="target_id" required>
+        <option value="">Target&hellip;</option>
+        <% @targets.each do |t| %><option value="<%= t.id %>"><%= h(t.name) %></option><% end %>
+      </select>
+    </div>
+    <div class="col-md-3">
+      <select class="form-select" name="engine_id" required>
+        <option value="">Engine&hellip;</option>
+        <% @engines.each do |e| %><option value="<%= e.id %>"><%= h(e.name) %></option><% end %>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <select class="form-select" name="schedule_type" id="schedule_type" onchange="toggleScheduleType()">
+        <option value="interval">Every N minutes</option>
+        <option value="daily">Daily at HH:MM</option>
+      </select>
+    </div>
+    <div class="col-md-2" id="interval_field"><input class="form-control" name="interval_minutes" type="number" min="1" value="60" placeholder="minutes"></div>
+    <div class="col-md-2" id="daily_field" style="display:none"><input class="form-control" name="daily_at" placeholder="HH:MM" value="03:00"></div>
+    <div class="col-md-2"><button class="btn btn-primary w-100">Add schedule</button></div>
+  </form>
+</div>
+<script>
+function toggleScheduleType() {
+  var t = document.getElementById('schedule_type').value;
+  document.getElementById('interval_field').style.display = (t === 'interval') ? '' : 'none';
+  document.getElementById('daily_field').style.display = (t === 'daily') ? '' : 'none';
+}
+</script>
+
+<table class="table table-sm">
+  <thead><tr><th>Target</th><th>Engine</th><th>Schedule</th><th>Last run</th><th>Next run</th><th>Active</th><th></th></tr></thead>
+  <tbody>
+  <% @schedules.each do |s| %>
+    <tr>
+      <td><%= h(s.target&.name) %></td>
+      <td><%= h(s.engine&.name) %></td>
+      <td><%= s.schedule_type == 'daily' ? "daily at #{s.daily_at}" : "every #{s.interval_minutes}m" %></td>
+      <td><%= s.last_run_at %></td>
+      <td><%= s.next_run_at %></td>
+      <td><span class="badge <%= s.active ? 'bg-success' : 'bg-secondary' %>"><%= s.active ? 'active' : 'paused' %></span></td>
+      <td>
+        <form method="post" action="/schedules/<%= s.id %>/toggle" style="display:inline">
+          <button class="btn btn-sm btn-outline-light"><%= s.active ? 'Pause' : 'Resume' %></button>
+        </form>
+        <form method="post" action="/schedules/<%= s.id %>/delete" style="display:inline" onsubmit="return confirm('Delete this schedule?')">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% end %>
+  <% if @schedules.empty? %><tr><td colspan="7" class="text-muted">No schedules yet.</td></tr><% end %>
+  </tbody>
+</table>

@@ -1,0 +1,114 @@
+<div class="d-flex justify-content-between align-items-center mb-2">
+  <h1>Scan #<%= @scan.id %> <span id="scan-status" class="badge badge-status-<%= @scan.status %>"><%= @scan.status %></span></h1>
+  <div>
+    <% if %w[queued running].include?(@scan.status) %>
+      <form method="post" action="/scans/<%= @scan.id %>/cancel" style="display:inline" id="cancel-form" onsubmit="return confirm('Cancel this scan? In-flight stages will be killed.')">
+        <button class="btn btn-outline-danger btn-sm" id="cancel-btn">Cancel scan</button>
+      </form>
+    <% end %>
+    <a class="btn btn-outline-light btn-sm" href="/scans/<%= @scan.id %>/findings.csv">Export findings CSV</a>
+  </div>
+</div>
+<p class="text-muted">Target: <strong><%= h(@scan.target.name) %></strong> &middot; Engine: <strong><%= h(@scan.engine.name) %></strong></p>
+
+<div class="row">
+  <div class="col-md-6">
+    <h5>Stages</h5>
+    <table class="table table-sm">
+      <thead><tr><th>Stage</th><th>Tool</th><th>Target</th><th>Host</th><th>Status</th></tr></thead>
+      <tbody id="task-table">
+        <% @tasks.each do |t| %>
+          <tr id="task-row-<%= t.id %>">
+            <td><%= h(t.stage_name) %><% if t.parent_task_id %> <span class="text-muted" title="chained from stage #<%= t.parent_task_id %>">&#8618;</span><% end %></td>
+            <td><code><%= h(t.tool) %></code></td>
+            <td class="text-muted"><%= h(t.target_value) %></td>
+            <td><%= t.host ? h(t.host.name) : 'local' %></td>
+            <td><span id="task-status-<%= t.id %>" class="badge badge-status-<%= t.status %>"><%= t.status %></span></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h5>Findings <span id="findings-count" class="badge bg-secondary"><%= @findings.count %></span></h5>
+    <table class="table table-sm">
+      <thead><tr><th>Kind</th><th>Value</th></tr></thead>
+      <tbody id="findings-table">
+        <% @findings.each do |f| %>
+          <tr><td><%= h(f.kind) %></td><td><%= h(f.value) %></td></tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-6">
+    <h5>Live output</h5>
+    <pre class="log" id="live-log"><% @tasks.each { |t| %><%= h(t.output) %><% } %></pre>
+  </div>
+</div>
+
+<script>
+(function() {
+  var scanId = <%= @scan.id %>;
+  var log = document.getElementById('live-log');
+  var scanStatus = document.getElementById('scan-status');
+  var taskTable = document.getElementById('task-table');
+  var findingsTable = document.getElementById('findings-table');
+  var findingsCount = document.getElementById('findings-count');
+  var cancelForm = document.getElementById('cancel-form');
+  var count = <%= @findings.count %>;
+  var TERMINAL = ['completed', 'failed', 'cancelled'];
+
+  function setBadge(el, status) {
+    el.textContent = status;
+    el.className = 'badge badge-status-' + status;
+  }
+
+  function appendLog(line) {
+    log.textContent += line + "\n";
+    log.scrollTop = log.scrollHeight;
+  }
+
+  if (!!window.EventSource && TERMINAL.indexOf('<%= @scan.status %>') === -1) {
+    var es = new EventSource('/scans/' + scanId + '/stream');
+    es.onmessage = function(evt) {
+      var data = JSON.parse(evt.data);
+      if (data.type === 'scan_status') {
+        setBadge(scanStatus, data.status);
+        if (TERMINAL.indexOf(data.status) !== -1) {
+          es.close();
+          if (cancelForm) cancelForm.style.display = 'none';
+        }
+      } else if (data.type === 'task') {
+        var row = document.getElementById('task-row-' + data.task.id);
+        if (!row) {
+          row = document.createElement('tr');
+          row.id = 'task-row-' + data.task.id;
+          var tdStage = document.createElement('td'); tdStage.textContent = data.task.stage_name;
+          var tdTool = document.createElement('td'); var code = document.createElement('code'); code.textContent = data.task.tool; tdTool.appendChild(code);
+          var tdTarget = document.createElement('td'); tdTarget.className = 'text-muted'; tdTarget.textContent = data.task.target_value || '';
+          var tdHost = document.createElement('td'); tdHost.textContent = data.task.host_id || 'local';
+          var tdStatus = document.createElement('td'); var badge = document.createElement('span');
+          badge.id = 'task-status-' + data.task.id;
+          badge.className = 'badge badge-status-' + data.task.status;
+          badge.textContent = data.task.status;
+          tdStatus.appendChild(badge);
+          row.appendChild(tdStage); row.appendChild(tdTool); row.appendChild(tdTarget); row.appendChild(tdHost); row.appendChild(tdStatus);
+          taskTable.appendChild(row);
+        }
+      } else if (data.type === 'task_update') {
+        var badge2 = document.getElementById('task-status-' + data.task.id);
+        if (badge2) setBadge(badge2, data.task.status);
+      } else if (data.type === 'output') {
+        appendLog(data.line);
+      } else if (data.type === 'finding') {
+        var tr = document.createElement('tr');
+        var tdKind = document.createElement('td'); tdKind.textContent = data.finding.kind;
+        var tdValue = document.createElement('td'); tdValue.textContent = data.finding.value;
+        tr.appendChild(tdKind); tr.appendChild(tdValue);
+        findingsTable.appendChild(tr);
+        count += 1;
+        findingsCount.textContent = count;
+      }
+    };
+  }
+})();
+</script>

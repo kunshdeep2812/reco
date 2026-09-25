@@ -1,0 +1,26 @@
+<h1 class="mb-4">Findings</h1>
+
+<form method="get" class="mb-3 row g-2">
+  <div class="col-md-3">
+    <select class="form-select" name="kind" onchange="this.form.submit()">
+      <option value="">All kinds</option>
+      <% @kinds.each do |k| %>
+        <option value="<%= k %>" <%= 'selected' if @kind == k %>><%= k %></option>
+      <% end %>
+    </select>
+  </div>
+</form>
+
+<table class="table table-sm">
+  <thead><tr><th>Scan</th><th>Kind</th><th>Value</th></tr></thead>
+  <tbody>
+  <% @findings.each do |f| %>
+    <tr>
+      <td><a href="/scans/<%= f.scan_id %>">#<%= f.scan_id %></a></td>
+      <td><%= h(f.kind) %></td>
+      <td><%= h(f.value) %></td>
+    </tr>
+  <% end %>
+  <% if @findings.empty? %><tr><td colspan="3" class="text-muted">No findings yet.</td></tr><% end %>
+  </tbody>
+</table>

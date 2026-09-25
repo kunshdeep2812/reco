@@ -1,0 +1,10 @@
+.git
+Output/*
+!Output/Don't delete this folder
+dashboard/data/*.sqlite3
+dashboard/data/*.sqlite3-*
+dashboard/data/secret.key
+dashboard/data/admin_credentials.txt
+dashboard/logs/*.log
+*.gem
+.bundle/
